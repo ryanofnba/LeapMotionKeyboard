@@ -30,10 +30,21 @@ public class GUI implements Observer {
 		frame.setBounds(300, 150, kWidth, kHeight);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		keyboardPanel = new KeyBoardPanel();
+                keyboardPanel = new KeyBoardPanel();
+                //Setting this layout to circular for every time a new
+                //component is added.
+                keyboardPanel.setLayout(new CircleLayout(true));
 		keyboardPanel.setBounds(0, 0, kWidth, kHeight);
+                
+                //Setting a key for every letter in the alphabet
+                for (int i = 0; i < 26; i++) {
+                  keyboardPanel.add(new Key("" + (char)('A' + i)));
+                }
+                
+                //This is the "OK" key, the "!" is so I know where it is located
+                keyboardPanel.add(new Key("!"));
+                
 		frame.getContentPane().add(keyboardPanel);
-		
 		frame.setVisible(true);
 	}
 	
