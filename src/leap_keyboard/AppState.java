@@ -6,6 +6,7 @@ public class AppState extends Observable {
 	private int fingerX;
 	private int fingerY;
 	private int fingerZ;
+	private Key curKey;
 	
 	public AppState() {
 		fingerX = fingerY = fingerZ = 0;
@@ -36,5 +37,14 @@ public class AppState extends Observable {
 	public void setFingerZ(int zPos) {
 		fingerZ = zPos;
 		setChanged();
+	}
+	
+	public void setCurKey(Key key) {
+		curKey = key;
+		System.out.println(curKey.toString());
+	}
+	
+	public Key getCurKey() {
+		return curKey;
 	}
 }

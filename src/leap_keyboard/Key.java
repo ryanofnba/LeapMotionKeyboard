@@ -28,4 +28,9 @@ public class Key extends JPanel {
         this.setOpaque(false);
         label.setFont(new Font("Arial", Font.PLAIN, 24));
     }
+    
+    @Override
+    public String toString() {
+    	return keyName;
+    }
 }

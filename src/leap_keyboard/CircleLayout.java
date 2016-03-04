@@ -63,11 +63,11 @@ class CircleLayout implements LayoutManager {
   public void layoutContainer(Container parent) {
     int x, y, w, h, s, c;
     int n = parent.getComponentCount();
-    double parentWidth = parent.getSize().width;
-    double parentHeight = parent.getSize().height;
+    double parentWidth = parent.getSize().width / 1.5;
+    double parentHeight = parent.getSize().height / 1.5;
     Insets insets = parent.getInsets();
-    int centerX = (int) (parentWidth - (insets.left + insets.right)) / 2;
-    int centerY = (int) (parentHeight - (insets.top + insets.bottom)) / 2;
+    int centerX = (int) ((parentWidth - (insets.left + insets.right)) / 1.5) + 35;
+    int centerY = (int) ((parentHeight - (insets.top + insets.bottom)) / 1.5);
     
     Component comp = null;
     Dimension compPS = null;
@@ -100,8 +100,8 @@ class CircleLayout implements LayoutManager {
         else
         {
             if (isCircle) {
-                c = (int) (r * Math.sin(2 * (i + 1) * Math.PI / (n + 1)));
-                s = (int) (r * Math.cos(2 * (i + 1) * Math.PI / (n + 1)));
+                c = (int) (r * Math.sin(2 * (i + 2) * Math.PI / (n + 2)));
+                s = (int) (r * Math.cos(2 * (i + 2) * Math.PI / (n + 2)));
               } else {
                 c = (int) ((centerX * 0.75) * Math.cos(2 * i * Math.PI / (n - 1)));
                 s = (int) ((centerY * 0.75) * Math.sin(2 * i * Math.PI / (n - 1)));

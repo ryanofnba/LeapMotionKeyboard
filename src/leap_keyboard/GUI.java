@@ -1,10 +1,13 @@
 package leap_keyboard;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -22,7 +25,13 @@ public class GUI implements Observer {
 	public static final int kWidth = 800;
 	public static final int kHeight = 600;
 	
+	private ArrayList<Key> keys;
+	private ArrayList<Point> points;
+	
 	public GUI(AppState state) {
+		keys = new ArrayList<>();
+		points = new ArrayList<>();
+		
 		this.state = state;
 		
 		frame = new JFrame();
@@ -30,22 +39,33 @@ public class GUI implements Observer {
 		frame.setBounds(300, 150, kWidth, kHeight);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-                keyboardPanel = new KeyBoardPanel();
-                //Setting this layout to circular for every time a new
-                //component is added.
-                keyboardPanel.setLayout(new CircleLayout(true));
-		keyboardPanel.setBounds(0, 0, kWidth, kHeight);
-                
-                //Setting a key for every letter in the alphabet
-                for (int i = 0; i < 26; i++) {
-                  keyboardPanel.add(new Key("" + (char)('A' + i)));
-                }
-                
-                //This is the "OK" key, the "!" is so I know where it is located
-                keyboardPanel.add(new Key("!"));
+        keyboardPanel = new KeyBoardPanel();
+        //Setting this layout to circular for every time a new
+        //component is added.
+        keyboardPanel.setLayout(new CircleLayout(true));
+        keyboardPanel.setBounds(0, 0, kWidth, kHeight);
+        
+        //Setting a key for every letter in the alphabet
+        Key key;
+        for (int i = 0; i < 26; i++) {
+        	key = new Key("" + (char)('A' + i));
+        	keyboardPanel.add(key);
+        	keys.add(key);
+        }
+        
+        //This is the "OK" key, the "!" is so I know where it is located
+        key = new Key("\u2713");
+        keyboardPanel.add(key);
+        keys.add(key);
                 
 		frame.getContentPane().add(keyboardPanel);
 		frame.setVisible(true);
+		
+		for (Key skey : keys) {
+			if (skey != null) {
+				points.add(skey.getLocation());
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -56,27 +76,25 @@ public class GUI implements Observer {
 	public void update(Observable o, Object arg) {
 		keyboardPanel.xPos = state.getFingerX();
 		keyboardPanel.yPos = state.getFingerY();
-		if (state.getFingerZ() < - 100) {
-			keyboardPanel.label.setText("Numbers Keyboard");
-		}
-		else {
-			keyboardPanel.label.setText("Characters Keyboard");
-		}
 		
 		keyboardPanel.repaint();
+	}
+	
+	public List<Point> getKeyPositions() {
+		return points;
+	}
+	
+	public Key getKey(int pos) {
+		return keys.get(pos);
 	}
 }
 
 class KeyBoardPanel extends JComponent {
 	int xPos;
 	int yPos;
-	JLabel label;
 		
 	public KeyBoardPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		label = new JLabel();
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		add(label);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -86,7 +104,7 @@ class KeyBoardPanel extends JComponent {
 		g2d.fillRect(0, 0, GUI.kWidth, GUI.kHeight);
 
 		Point2D center = new Point2D.Float(20,20);
-		float radius = 40;
+		float radius = 25;
 		float[] distribution = {0.0f, 1.0f};
 		float[] hsbcolor = Color.RGBtoHSB(255, 220, 178, null);
 		float[] hsbcolor2 = Color.RGBtoHSB(231, 158, 109, null);
