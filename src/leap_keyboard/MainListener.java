@@ -27,16 +27,16 @@ class MainListener extends Listener {
 
 	public void onConnect(Controller controller) {
 		System.out.println("Connected");
+		
+		// Start a thread to check characters
 		ScheduledExecutorService exec = Executors
 				.newSingleThreadScheduledExecutor();
 		exec.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				Key key = matchKeyPos();
-				if (key != null) {
-					System.out.println(key.toString());
-				} else {
-					System.out.println("Null Key");
+				Character key = matchKeyPos();
+				if (key != null && state != null) {
+					state.updatedCurrentCharacter(key.charValue());
 				}
 			}
 		}, 0, 500, TimeUnit.MILLISECONDS);
@@ -71,7 +71,7 @@ class MainListener extends Listener {
 		this.keys = keys;
 	}
 
-	public Key matchKeyPos() {
+	public Character matchKeyPos() {
 		List<Point> keyPos = display.getKeyPositions();
 		if (keyPos == null || keyPos.size() != 27) {
 			return null;
@@ -82,7 +82,7 @@ class MainListener extends Listener {
 
 		for (int index = 0; index < keyPos.size(); index++) {
 			if (withinRange(keyPos.get(index), finger, range)) {
-				return display.getKey(index);
+				return Character.valueOf(display.getKey(index));
 			}
 		}
 
@@ -94,7 +94,7 @@ class MainListener extends Listener {
 		int maxX = two.x + range;
 		int minY = two.y - range;
 		int maxY = two.y + range;
-		
+
 		if (one.x >= minX && one.x <= maxX && one.y >= minY && one.y <= maxY) {
 			return true;
 		}

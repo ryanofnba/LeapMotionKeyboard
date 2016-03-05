@@ -1,6 +1,8 @@
 package leap_keyboard;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,15 +17,20 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 public class GUI implements Observer {
 	private JFrame frame;
 	private KeyBoardPanel keyboardPanel;
 	private AppState state;
+	private JPanel charPanel;
+	private JLabel textLabel;
 	
 	public static final int kWidth = 800;
 	public static final int kHeight = 600;
+	public static final int kCharPanelHeight = 75;
 	
 	private ArrayList<Key> keys;
 	private ArrayList<Point> points;
@@ -38,6 +45,14 @@ public class GUI implements Observer {
 		frame.setResizable(false);
 		frame.setBounds(300, 150, kWidth, kHeight);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		charPanel = new JPanel();
+		charPanel.setBounds(0, 0, kWidth, kCharPanelHeight);
+		charPanel.setPreferredSize(new Dimension(kWidth , kCharPanelHeight));
+		charPanel.setBorder(new LineBorder(Color.black, 2));
+		textLabel = new JLabel();
+		textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		charPanel.add(textLabel);
 		
         keyboardPanel = new KeyBoardPanel();
         //Setting this layout to circular for every time a new
@@ -58,6 +73,7 @@ public class GUI implements Observer {
         keyboardPanel.add(key);
         keys.add(key);
                 
+        frame.getContentPane().add(charPanel);
 		frame.getContentPane().add(keyboardPanel);
 		frame.setVisible(true);
 		
@@ -77,6 +93,8 @@ public class GUI implements Observer {
 		keyboardPanel.xPos = state.getFingerX();
 		keyboardPanel.yPos = state.getFingerY();
 		
+		textLabel.setText(String.valueOf(state.getCurKey()));
+		
 		keyboardPanel.repaint();
 	}
 	
@@ -84,8 +102,8 @@ public class GUI implements Observer {
 		return points;
 	}
 	
-	public Key getKey(int pos) {
-		return keys.get(pos);
+	public char getKey(int pos) {
+		return keys.get(pos).toString().charAt(0);
 	}
 }
 
