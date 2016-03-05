@@ -27,6 +27,7 @@ public class GUI implements Observer {
 	private AppState state;
 	private JPanel charPanel;
 	private JLabel textLabel;
+	private JLabel sentenceLabel;
 	
 	public static final int kWidth = 800;
 	public static final int kHeight = 600;
@@ -50,9 +51,13 @@ public class GUI implements Observer {
 		charPanel.setBounds(0, 0, kWidth, kCharPanelHeight);
 		charPanel.setPreferredSize(new Dimension(kWidth , kCharPanelHeight));
 		charPanel.setBorder(new LineBorder(Color.black, 2));
-		textLabel = new JLabel();
+		charPanel.setLayout(new BoxLayout(charPanel, BoxLayout.Y_AXIS));
+		textLabel = new JLabel("");
 		textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		charPanel.add(textLabel);
+		sentenceLabel = new JLabel("");
+		sentenceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		charPanel.add(sentenceLabel);
 		
         keyboardPanel = new KeyBoardPanel();
         //Setting this layout to circular for every time a new
@@ -93,7 +98,8 @@ public class GUI implements Observer {
 		keyboardPanel.xPos = state.getFingerX();
 		keyboardPanel.yPos = state.getFingerY();
 		
-		textLabel.setText(String.valueOf(state.getCurKey()));
+		textLabel.setText(String.valueOf(state.getCurWord()));
+		sentenceLabel.setText(state.getCurSentence());
 		
 		keyboardPanel.repaint();
 	}
